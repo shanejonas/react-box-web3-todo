@@ -5,6 +5,10 @@ body,
   font-family: 'Open Sans', sans-serif;
 }
 
+body {
+  margin: 0;
+}
+
 h1, h2, h3 {
   font-family: 'Oswald', 'Arial Narrow', sans-serif;
 }

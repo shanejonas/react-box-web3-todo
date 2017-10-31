@@ -1,27 +1,27 @@
-import { WEB3_CONNECTED, TODO_ADDED, TODOS_CONTRACT_INSTANTIATED, TODOS_FETCHED, defaultState } from '../actions';
+import { WEB3_CONNECTED, JOB_ADDED, JOBS_CONTRACT_INSTANTIATED, JOBS_FETCHED, defaultState } from '../actions';
 
-const todos = (state = defaultState, action) => {
+const jobs = (state = defaultState, action) => {
   switch (action.type) {
   case WEB3_CONNECTED:
     return {
       ...state,
       web3: action.payload
     };
-  case TODOS_CONTRACT_INSTANTIATED:
+  case JOBS_CONTRACT_INSTANTIATED:
     return {
       ...state,
-      todosContract: action.payload
+      jobsContract: action.payload
     };
-  case TODOS_FETCHED:
+  case JOBS_FETCHED:
     return {
       ...state,
-      todos: action.payload
+      jobs: action.payload
     };
-  case TODO_ADDED:
+  case JOB_ADDED:
     return {
       ...state,
-      todos: [
-        ...state.todos,
+      jobs: [
+        ...state.jobs,
         action.payload
       ]
     };
@@ -30,4 +30,4 @@ const todos = (state = defaultState, action) => {
   }
 };
 
-export default todos;
+export default jobs;

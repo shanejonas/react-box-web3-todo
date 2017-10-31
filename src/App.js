@@ -1,21 +1,20 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import contract from 'truffle-contract'
-import {web3connect, fetchTodos, addTodo, instantiateTodoContract} from './actions';
+import React, { Component } from 'react';
+import TextField from 'material-ui/TextField';
+import { connect } from 'react-redux';
+import contract from 'truffle-contract';
+import { web3connect, fetchJobs, addJob, instantiateJobContract} from './actions';
+import AppBar from 'material-ui/AppBar';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
 
-import './css/oswald.css'
-import './css/open-sans.css'
-import './css/pure-min.css'
-import './App.css'
+import './css/oswald.css';
+import './css/open-sans.css';
+import './App.css';
+import JobList from './components/JobList';
 
 class App extends Component {
   constructor(props) {
     super(props)
-
-    this.state = {
-      textarea: ''
-    }
-    this.renderTodos.bind(this);
   }
 
   componentWillMount() {
@@ -23,51 +22,75 @@ class App extends Component {
     // See actions/index.js => web3connect for more info.
     window.addEventListener('load', () => {
       this.props.web3connect();
-      this.props.instantiateTodoContract().then(() => {
-        this.props.fetchTodos();
+      this.props.instantiateJobContract().then(() => {
+        this.props.fetchJobs();
       });
     });
   }
-
-  handleTextAreaChange(event) {
-    this.setState({
-      textarea: event.target.value
-    });
+  renderJobs(jobs) {
+    return (
+      <JobList jobs={jobs} onJobClick={() => console.log('clicked')}/>
+    )
   }
-  renderTodos(todos) {
-    return todos.map((todo, i) => {
-      return (
-        <li key={i}>{todo}</li>
-      );
-    })
+  addNewJob() {
+    this.props.addJob(
+      this.state.title,
+      this.state.company,
+      this.state.body,
+      this.state.contact,
+      this.state.link
+    )
   }
-  addTodo() {
-    this.props.addTodo(this.state.textarea);
+  onTitleChange(event, title) {
+    this.setState({title});
   }
-
+  onCompanyChange(event, company) {
+    this.setState({company});
+  }
+  onBodyChange(event, body) {
+    this.setState({body});
+  }
+  onContactChange(event, contact) {
+    this.setState({contact});
+  }
+  onLinkChange(event, link) {
+    this.setState({link});
+  }
   render() {
     if (!this.props.web3) {
       return (
         <div> Loading web3 </div>
       );
     }
+
+    if (!this.props.jobs) {
+      return (
+        <div> no jobs </div>
+      );
+    }
     return (
       <div className="App">
-        <nav className="navbar pure-menu pure-menu-horizontal">
-            <a href="#" className="pure-menu-heading pure-menu-link">Truffle Box</a>
-        </nav>
+        <AppBar
+            title="Cryptocurrency Careers"
+          />
         <main className="container">
-          <div className="pure-g">
-            <div className="pure-u-1-1">
-              <h1>Todos</h1>
-              <textarea id="textarea" value={this.state.textarea} onChange={this.handleTextAreaChange.bind(this)} />
-              <button onClick={this.addTodo.bind(this)}>Add Todo</button>
-              <ul>
-                {this.renderTodos(this.props.todos)}
-              </ul>
-            </div>
-          </div>
+          <TextField underlineStyle={{backgroundColor: 'black'}} floatingLabelText="Title" onChange={this.onTitleChange.bind(this)} />
+          <br />
+          <TextField floatingLabelText="Company" onChange={this.onCompanyChange.bind(this)} />
+          <br />
+          <TextField floatingLabelText="Body" multiline={true} onChange={this.onBodyChange.bind(this)} />
+          <br />
+          <TextField floatingLabelText="Contact" onChange={this.onContactChange.bind(this)} />
+          <br />
+          <TextField floatingLabelText="Link" onChange={this.onLinkChange.bind(this)} />
+          <br />
+          <RaisedButton onClick={this.addNewJob.bind(this)} label="Add Job" primary={true}/>
+          <br />
         </main>
+        <Divider />
+        <div>
+          {this.renderJobs(this.props.jobs)}
+        </div>
       </div>
     );
   }
@@ -75,14 +98,14 @@ class App extends Component {
 
 const mapDispatchToProps = {
   web3connect,
-  instantiateTodoContract,
-  fetchTodos,
-  addTodo
+  instantiateJobContract,
+  fetchJobs,
+  addJob
 };
 
 const mapStateToProps = (state) => ({
   web3: state.web3,
-  todos: state.todos
+  jobs: state.jobs
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
