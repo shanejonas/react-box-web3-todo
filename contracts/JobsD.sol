@@ -58,7 +58,7 @@ contract JobsD {
         }
     }
 
-    function getTitle() constant public returns (bytes32[]) {
+    function getTitles() constant public returns (bytes32[]) {
         uint len = getAdjustedLength();
         bytes32[] memory title = new bytes32[](len);
         uint j = 0;
@@ -73,7 +73,7 @@ contract JobsD {
         return title;
     }
 
-    function getCompany() constant public returns (bytes32[]) {
+    function getCompanies() constant public returns (bytes32[]) {
         uint len = getAdjustedLength();
         bytes32[] memory company = new bytes32[](len);
         uint j = 0;
@@ -88,7 +88,7 @@ contract JobsD {
         return company;
     }
 
-    function getBody() constant public returns (bytes32[], bytes32[], bytes32[], bytes32[], bytes32[]) {
+    function getBodies() constant public returns (bytes32[], bytes32[], bytes32[], bytes32[], bytes32[]) {
         uint len = getAdjustedLength();
         bytes32[] memory body0 = new bytes32[](len);
         bytes32[] memory body1 = new bytes32[](len);
@@ -111,7 +111,7 @@ contract JobsD {
         return (body0, body1, body2, body3, body4);
     }
 
-    function getLink() constant public returns (bytes32[]) {
+    function getLinks() constant public returns (bytes32[]) {
         uint len = getAdjustedLength();
         bytes32[] memory link = new bytes32[](len);
         uint j = 0;
@@ -126,7 +126,7 @@ contract JobsD {
         return link;
     }
 
-    function getContact() constant public returns (bytes32[]) {
+    function getContacts() constant public returns (bytes32[]) {
         uint len = getAdjustedLength();
         bytes32[] memory contact = new bytes32[](len);
         uint j = 0;
