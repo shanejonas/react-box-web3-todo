@@ -34,9 +34,7 @@ contract JobsD {
         bytes32 link,
         bytes32 contact
     ) public payable {
-        if (msg.value < ADD_JOB_COST) {
-            return;
-        }
+        assert(msg.value < ADD_JOB_COST);
 
         foundation_wallet.transfer(msg.value);
 
