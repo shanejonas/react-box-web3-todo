@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import JobsContract from '../../build/contracts/JobsD.json';
+import _ from 'lodash';
 
 export const WEB3_CONNECTED = 'WEB3_CONNECTED';
 export const WEB3_DISCONNECTED = 'WEB3_DISCONNECTED';
@@ -52,29 +53,35 @@ export function fetchJobs() {
     const state = getState();
     const web3 = state.web3;
     const jobsContract = state.jobsContract;
-    jobsContract.getJobs().then((jobs) => {
-      const FIELD_TITLE  = 0;
-      const FIELD_COMPANY = 1;
-      const FIELD_BODY  = 2;
-      const FIELD_LINK = 3;
-      const FIELD_CONTACT = 4;
-      const numJobs = jobs[0].length;
 
-      let jobStructs = [];
-      for (let i = 0; i < numJobs; i++) {
-        const job = {
-          title: web3.toAscii(jobs[FIELD_TITLE][i]),
-          company:  web3.toAscii(jobs[FIELD_COMPANY][i]),
-          body:  web3.toAscii(jobs[FIELD_BODY][i]),
-          link:  web3.toAscii(jobs[FIELD_LINK][i]),
-          contact:  web3.toAscii(jobs[FIELD_CONTACT][i])
+    const fields = ['Title', 'Company', 'Body', 'Link', 'Contact'];
+
+    Promise.all(fields.map((field) => {
+      console.log('method', `get${field}`);
+      return jobsContract[`get${field}`]();
+    })).then((jobs) => {
+        const FIELD_TITLE  = 0;
+        const FIELD_COMPANY = 1;
+        const FIELD_BODY  = 2;
+        const FIELD_LINK = 3;
+        const FIELD_CONTACT = 4;
+        const numJobs = jobs[0].length;
+
+        let jobStructs = [];
+        for (let i = 0; i < numJobs; i++) {
+          const job = {
+            title: web3.toAscii(jobs[FIELD_TITLE][i]),
+            company:  web3.toAscii(jobs[FIELD_COMPANY][i]),
+            body:  jobs[FIELD_BODY][i].map((item) => web3.toAscii(item)).join(''),
+            link:  web3.toAscii(jobs[FIELD_LINK][i]),
+            contact:  web3.toAscii(jobs[FIELD_CONTACT][i])
+          };
+          jobStructs.push(job);
         };
-        jobStructs.push(job);
-      };
-      dispatch({
-        type: JOBS_FETCHED,
-        payload: jobStructs
-      });
+        dispatch({
+          type: JOBS_FETCHED,
+          payload: jobStructs
+        });
     });
   };
 }
@@ -83,8 +90,9 @@ export function addJob(title, company, body, link, contact) {
   return (dispatch, getState) => {
     const web3 = getState().web3;
     const jobsContract = getState().jobsContract;
+    const [body0, body1 = [''], body2 = [''], body3 = [''], body4 = ['']] = _.chunk(body, 32);
     web3.eth.getAccounts((err, accounts) => {
-      jobsContract.addJob(web3.fromAscii(title), web3.fromAscii(company), web3.fromAscii(body), web3.fromAscii(link), web3.fromAscii(contact), {
+      jobsContract.addJob(web3.fromAscii(title), web3.fromAscii(company), web3.fromAscii(body0.join('')), web3.fromAscii(body1.join('')), web3.fromAscii(body2.join('')), web3.fromAscii(body3.join('')), web3.fromAscii(body4.join('')), web3.fromAscii(link), web3.fromAscii(contact), {
         gas: 1000000,
         value: 1e10,
         from: accounts[0]
