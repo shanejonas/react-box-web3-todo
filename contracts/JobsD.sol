@@ -14,6 +14,7 @@ contract JobsD {
         bytes32 body4;
         bytes32 link;
         bytes32 contact;
+        bytes32 logoUrl;
     }
 
     Job[] jobs;
@@ -32,14 +33,15 @@ contract JobsD {
         bytes32 body3,
         bytes32 body4,
         bytes32 link,
-        bytes32 contact
+        bytes32 contact,
+        bytes32 logoUrl
     ) public payable {
         assert(msg.value < ADD_JOB_COST);
 
         foundation_wallet.transfer(msg.value);
 
         if (jobs.length <= MAX_QUEUE_LENGTH) {
-            jobs.push(Job(title, company, body0, body1, body2, body3, body4, link, contact));
+            jobs.push(Job(title, company, body0, body1, body2, body3, body4, link, contact, logoUrl));
 
             if (jobs.length == MAX_QUEUE_LENGTH + 1) {
                 jobs[0].title = "";
@@ -49,7 +51,7 @@ contract JobsD {
 
         for (uint i = 0; i < jobs.length; i++) {
             if (jobs[i].title == "") {
-                jobs[i] = Job(title, company, body0, body1, body2, body3, body4, link, contact);
+                jobs[i] = Job(title, company, body0, body1, body2, body3, body4, link, contact, logoUrl);
                 jobs[(i + 1) % MAX_QUEUE_LENGTH].title = "";
                 return;
             }
@@ -137,6 +139,21 @@ contract JobsD {
             }
         }
         return contact;
+    }
+
+    function getLogoUrl() constant public returns (bytes32[]) {
+        uint len = getAdjustedLength();
+        bytes32[] memory logoUrl = new bytes32[](len);
+        uint j = 0;
+        for (uint i = 0; i < jobs.length; i++) {
+            if (jobs[i].title == "") {
+            } else {
+                Job storage job = jobs[i];
+                logoUrl[j] = job.logoUrl;
+                j++;
+            }
+        }
+        return logoUrl;
     }
 
     function getAdjustedLength() constant private returns (uint) {
