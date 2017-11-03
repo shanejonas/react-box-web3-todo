@@ -1,7 +1,7 @@
 pragma solidity ^0.4.2;
 
 contract JobsD {
-    uint MAX_QUEUE_LENGTH = 5;
+    uint MAX_QUEUE_LENGTH = 50;
     uint ADD_JOB_COST = 1e10;
 
     struct Job { // Struct
