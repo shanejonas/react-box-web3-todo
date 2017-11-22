@@ -4,20 +4,19 @@ This box comes with everything you need to start using smart contracts from a re
 
 ## Installation
 
-1. Install truffle and an ethereum client. For local development, try EthereumJS TestRPC.
+1. Install Truffle and an Ethereum client. For local development, try EthereumJS TestRPC.
 ```javascript
 npm install -g truffle // Version 3.0.5+ required.
 npm install -g ethereumjs-testrpc
 ```
 
-2. Download this repo.
+2. Unbox in the project directory. This will also install the dependencies.
 ```javascript
-git clone git@github.com:shanejonas/react-box-web3-todo.git
+truffle unbox shanejonas/react-box-web3-todo.git
 ```
 
 3. Compile and migrate the contracts.
 ```javascript
-cd react-box-web3-todo
 truffle compile
 truffle migrate
 ```
@@ -27,7 +26,7 @@ truffle migrate
 npm run start
 ```
 
-5. Jest is included for testing React components and Truffle's own suite is incldued for smart contracts. Be sure you've compile your contracts before running jest, or you'll receive some file not found errors.
+5. Jest is included for testing React components and Truffle's own suite is included for smart contracts. Be sure you've compile your contracts before running jest, or you'll receive some file not found errors.
 ```javascript
 // Runs Jest for component tests.
 npm run test
@@ -53,4 +52,4 @@ The production build will be in the build_webpack folder. This is because Truffl
 
 * __Where can I find more documentation?__
 
-All truffle boxes are a marriage of [Truffle](http://truffleframework.com/) and a React setup created with [create-react-app](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md). Either one would be a great place to start!`
+This Truffle Box is a marriage of [Truffle](http://truffleframework.com/) and a React setup created with [create-react-app](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md). Either one would be a great place to start!
